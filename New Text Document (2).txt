@@ -1,0 +1,16 @@
+# My Microservices Project
+
+This repository contains 4 Spring Boot microservices:
+
+1. user-service
+2. budget-service
+3. category-service
+4. expense-service
+
+## How to run
+
+Run each service separately:
+
+```bash
+cd user-service
+mvn spring-boot:run
