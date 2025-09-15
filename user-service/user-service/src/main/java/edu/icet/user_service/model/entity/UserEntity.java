@@ -3,6 +3,8 @@ package edu.icet.user_service.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -12,18 +14,20 @@ import lombok.*;
 @Table(name = "users")
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
-    @Column(name = "username", nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(nullable = false)
+    private String password; // Encrypted
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private boolean enabled = true;
 
 
 }

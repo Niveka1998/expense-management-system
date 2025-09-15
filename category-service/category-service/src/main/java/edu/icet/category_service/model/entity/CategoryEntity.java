@@ -20,4 +20,8 @@ public class CategoryEntity {
 
     @Column(name = "description")
     private String description;
+
+
+    private Long userId;
+    private String username;
 }

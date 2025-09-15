@@ -7,19 +7,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponseDTO {
-    private String token;
-    private String tokenType;
+public class SignupResponseDTO {
     private Long userId;
     private String username;
     private String email;
+    private String message;
 
-    // Constructor with default tokenType
-    public LoginResponseDTO(String token, Long userId, String username, String email) {
-        this.token = token;
-        this.tokenType = "Bearer";
+    // Constructor without message (will set default message)
+    public SignupResponseDTO(Long userId, String username, String email) {
         this.userId = userId;
         this.username = username;
         this.email = email;
+        this.message = "User registered successfully!";
     }
 }

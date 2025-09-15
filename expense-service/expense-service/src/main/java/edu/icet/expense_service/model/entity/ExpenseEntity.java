@@ -21,4 +21,12 @@ public class ExpenseEntity {
     private LocalDate date;
     private String note;
 
+    private Long budgetId;
+    private String budgetTitle;
+
+    private Long categoryId;
+    private String name;
+
+    private Long userId;
+    private String username;
 }

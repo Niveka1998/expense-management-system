@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/expense")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5174", "http://localhost:5173"})
 public class ExpenseController {
 
     @Autowired
@@ -37,9 +37,12 @@ public class ExpenseController {
     @PostMapping("/add-expense-with-validation")
     public ResponseEntity<ExpenseDTO> addExpenseWithValidation(@RequestBody ExpenseDTO expenseDTO){
         try {
+            System.out.println("Received ExpenseDTO: " + expenseDTO);
             ExpenseDTO savedExpense = expenseServiceImpl.addExpenseWithValidation(expenseDTO);
             return ResponseEntity.ok(savedExpense);
         } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

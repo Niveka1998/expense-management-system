@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/budget")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5174", "http://localhost:5173"})
 public class BudgetController {
 
     @Autowired

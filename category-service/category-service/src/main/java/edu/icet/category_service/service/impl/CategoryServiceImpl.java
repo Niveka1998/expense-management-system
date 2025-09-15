@@ -40,6 +40,8 @@ public class CategoryServiceImpl implements CategoryService {
         //categoryEntity.setCategoryId(categoryDTO.getCategoryId());
         categoryEntity.setName(categoryDTO.getName());
         categoryEntity.setDescription(categoryDTO.getDescription());
+        categoryEntity.setUserId(categoryDTO.getUserId());
+        categoryEntity.setUsername(categoryDTO.getUsername());
         categoryRepository.save(categoryEntity);
     }
 

@@ -26,5 +26,7 @@ public class BudgetEntity{
     @Column(name = "budget_title", nullable = false)
     private String budgetTitle;
 
+    private Long userId;
+    private String username;
 
 }

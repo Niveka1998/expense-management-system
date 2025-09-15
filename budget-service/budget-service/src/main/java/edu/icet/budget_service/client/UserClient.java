@@ -1,6 +1,7 @@
-package edu.icet.expense_service.client;
+package edu.icet.budget_service.client;
 
-import edu.icet.expense_service.model.dto.UserDTO;
+
+import edu.icet.budget_service.model.dto.UserDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

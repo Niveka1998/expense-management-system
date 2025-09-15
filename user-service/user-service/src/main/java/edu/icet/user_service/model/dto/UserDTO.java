@@ -1,7 +1,5 @@
 package edu.icet.user_service.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class UserDTO {
     private Long userId;
     private String email;

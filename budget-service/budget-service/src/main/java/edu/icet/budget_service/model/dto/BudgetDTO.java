@@ -9,12 +9,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BudgetDTO {
-    @JsonIgnore
     private Long budgetId;
     private Integer month;
     private Integer year;
     private Double amount;
     private String budgetTitle;
+
+    private Long userId;      // Foreign key reference
+    private String username;
+
     @Override
     public String toString() {
         return "BudgetDTO{" +

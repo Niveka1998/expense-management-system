@@ -9,8 +9,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDTO {
-    @JsonIgnore
     private Long categoryId;
     private String name;
     private String description;
+
+    private Long userId;      // Foreign key reference
+    private String username;
 }

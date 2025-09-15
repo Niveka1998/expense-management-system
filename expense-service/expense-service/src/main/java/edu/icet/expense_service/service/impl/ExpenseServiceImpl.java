@@ -57,12 +57,9 @@ public class ExpenseServiceImpl implements ExpenseService {
         budgetDTO.setAmount(budgetDTO.getAmount() - expenseDTO.getAmount());
         budgetClient.updateBudget(expenseDTO.getBudgetId(), budgetDTO);
         try {
-            UserDTO user = userClient.getUserByEmail(expenseDTO.getEmail());
-            System.out.println("User found: " + user.getUsername());
 
             CategoryDTO category = categoryClient.searchCategory(expenseDTO.getCategoryId());
             System.out.println("Category found: " + category.getName());
-
             return addExpense(expenseDTO);
 
         } catch (Exception e) {
@@ -72,7 +69,21 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
     @Override
     public ExpenseDTO addExpense(ExpenseDTO expenseDTO) {
-        ExpenseEntity expenseEntity = mapper.map(expenseDTO, ExpenseEntity.class);
+        ExpenseEntity expenseEntity = new ExpenseEntity();
+        expenseEntity.setTitle(expenseDTO.getTitle());
+        expenseEntity.setAmount(expenseDTO.getAmount());
+        expenseEntity.setDate(expenseDTO.getDate());
+        expenseEntity.setNote(expenseDTO.getNote());
+
+        expenseEntity.setBudgetId(expenseDTO.getBudgetId());
+        expenseEntity.setBudgetTitle(expenseDTO.getBudgetTitle());
+
+        expenseEntity.setCategoryId(expenseDTO.getCategoryId());
+        expenseEntity.setName(expenseDTO.getName());
+
+        expenseEntity.setUserId(expenseDTO.getUserId());
+        expenseEntity.setUsername(expenseDTO.getUsername());
+
         expenseRepository.save(expenseEntity);
         return expenseDTO;
     }

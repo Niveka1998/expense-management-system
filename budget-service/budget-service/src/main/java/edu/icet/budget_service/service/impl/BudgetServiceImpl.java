@@ -45,6 +45,8 @@ public class BudgetServiceImpl implements BudgetService {
         budgetEntity.setYear(budgetDTO.getYear());
         budgetEntity.setAmount(budgetDTO.getAmount());
         budgetEntity.setMonth(budgetDTO.getMonth());
+        budgetEntity.setUserId(budgetDTO.getUserId());
+        budgetEntity.setUsername(budgetDTO.getUsername());
         budgetRepository.save(budgetEntity);
     }
 
