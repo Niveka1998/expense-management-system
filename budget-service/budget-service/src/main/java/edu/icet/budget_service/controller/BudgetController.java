@@ -3,6 +3,8 @@ package edu.icet.budget_service.controller;
 import edu.icet.budget_service.model.dto.BudgetDTO;
 import edu.icet.budget_service.service.BudgetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,9 +18,14 @@ public class BudgetController {
     BudgetService budgetService;
 
     @GetMapping("/get-all-budgets")
-    public List<BudgetDTO> getAllBudgets(){
-        return budgetService.getAll();
-
+    public List<BudgetDTO> getAllBudgetsForCurrentUser(){
+        // Extract user ID from authentication
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof edu.icet.budget_service.model.dto.UserDTO) {
+            edu.icet.budget_service.model.dto.UserDTO userDTO = (edu.icet.budget_service.model.dto.UserDTO) authentication.getPrincipal();
+            return budgetService.getAllForUser(userDTO.getUserId());
+        }
+        throw new RuntimeException("User not authenticated");
     }
 
     @PostMapping("/add-new-budget")
@@ -27,7 +34,7 @@ public class BudgetController {
     }
 
     @PutMapping("/update-budget/{id}")
-    public void updateBudget(@PathVariable Long id , @RequestBody BudgetDTO budgetDTO){
+    public void updateBudget(@PathVariable Long id, @RequestBody BudgetDTO budgetDTO){
         budgetDTO.setBudgetId(id);
         budgetService.updateBudget(budgetDTO);
     }
@@ -39,6 +46,6 @@ public class BudgetController {
 
     @GetMapping("/{id}")
     public BudgetDTO searchBudget(@PathVariable Long id){
-        return budgetService.searchById(id);
+        return budgetService.getBudgetForCurrentUser(id); // Changed to user-specific method
     }
 }

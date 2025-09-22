@@ -61,7 +61,6 @@ public class UserController {
         }
     }
 
-    // Legacy endpoints for backward compatibility
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         try {
