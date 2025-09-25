@@ -107,32 +107,48 @@ public class ExpenseServiceImpl implements ExpenseService {
         expenseDTO.setUserId(currentUser.getUserId());
         expenseDTO.setUsername(currentUser.getUsername());
 
+        // Validate and get budget information
         BudgetDTO budgetDTO = budgetClient.searchBudget(expenseDTO.getBudgetId());
-
-        // Verify that the budget belongs to the current user
         if(budgetDTO == null){
             throw new RuntimeException("Budget not found for Id: " + expenseDTO.getBudgetId());
         }
 
+        // Verify that the budget belongs to the current user (if needed)
+        // Add this check if your budget service supports user-specific budgets
 
-
+        // Check if there's enough budget
         if (budgetDTO.getAmount() < expenseDTO.getAmount()) {
             throw new RuntimeException("Not enough budget. Available: " + budgetDTO.getAmount());
         }
 
+        // Update budget amount
         budgetDTO.setAmount(budgetDTO.getAmount() - expenseDTO.getAmount());
         budgetClient.updateBudget(expenseDTO.getBudgetId(), budgetDTO);
 
+        // Validate and get category information
+        CategoryDTO category = categoryClient.searchCategory(expenseDTO.getCategoryId());
+        if (category == null) {
+            throw new RuntimeException("Category not found for Id: " + expenseDTO.getCategoryId());
+        }
+
+        // Set the budget title and category name in the expense DTO
+        expenseDTO.setBudgetTitle(budgetDTO.getBudgetTitle());
+        expenseDTO.setName(category.getName());
+
+        System.out.println("=== DEBUG: Adding expense with validation ===");
+        System.out.println("User ID: " + expenseDTO.getUserId());
+        System.out.println("Username: " + expenseDTO.getUsername());
+        System.out.println("Budget Title: " + expenseDTO.getBudgetTitle());
+        System.out.println("Category Name: " + expenseDTO.getName());
+
         try {
-            CategoryDTO category = categoryClient.searchCategory(expenseDTO.getCategoryId());
-            System.out.println("Category found: " + category.getName());
             return addExpense(expenseDTO);
         } catch (Exception e) {
-            System.err.println("Error validating expense: " + e.getMessage());
-            throw new RuntimeException("Expense validation failed", e);
+            System.err.println("Error adding expense: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to add expense", e);
         }
     }
-
     @Override
     public ExpenseDTO addExpense(ExpenseDTO expenseDTO) {
         // Set current user info if not already set
