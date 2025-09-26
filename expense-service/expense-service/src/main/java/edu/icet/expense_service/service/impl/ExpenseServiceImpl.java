@@ -102,84 +102,76 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     public ExpenseDTO addExpenseWithValidation(ExpenseDTO expenseDTO) {
-        // Get current user and set user info
+        // Always get current user from security context
         UserDTO currentUser = getCurrentUser();
         expenseDTO.setUserId(currentUser.getUserId());
         expenseDTO.setUsername(currentUser.getUsername());
 
-        // Validate and get budget information
+        // Validate budget
         BudgetDTO budgetDTO = budgetClient.searchBudget(expenseDTO.getBudgetId());
-        if(budgetDTO == null){
+        if (budgetDTO == null) {
             throw new RuntimeException("Budget not found for Id: " + expenseDTO.getBudgetId());
         }
 
-        // Verify that the budget belongs to the current user (if needed)
-        // Add this check if your budget service supports user-specific budgets
-
-        // Check if there's enough budget
         if (budgetDTO.getAmount() < expenseDTO.getAmount()) {
             throw new RuntimeException("Not enough budget. Available: " + budgetDTO.getAmount());
         }
 
-        // Update budget amount
+        // Deduct the expense from budget
         budgetDTO.setAmount(budgetDTO.getAmount() - expenseDTO.getAmount());
         budgetClient.updateBudget(expenseDTO.getBudgetId(), budgetDTO);
 
-        // Validate and get category information
+        // Validate category
         CategoryDTO category = categoryClient.searchCategory(expenseDTO.getCategoryId());
         if (category == null) {
             throw new RuntimeException("Category not found for Id: " + expenseDTO.getCategoryId());
         }
 
-        // Set the budget title and category name in the expense DTO
+        // Set additional info
         expenseDTO.setBudgetTitle(budgetDTO.getBudgetTitle());
         expenseDTO.setName(category.getName());
 
-        System.out.println("=== DEBUG: Adding expense with validation ===");
-        System.out.println("User ID: " + expenseDTO.getUserId());
-        System.out.println("Username: " + expenseDTO.getUsername());
-        System.out.println("Budget Title: " + expenseDTO.getBudgetTitle());
-        System.out.println("Category Name: " + expenseDTO.getName());
-
-        try {
-            return addExpense(expenseDTO);
-        } catch (Exception e) {
-            System.err.println("Error adding expense: " + e.getMessage());
-            e.printStackTrace();
-            throw new RuntimeException("Failed to add expense", e);
-        }
+        return saveExpense(expenseDTO);
     }
+
     @Override
     public ExpenseDTO addExpense(ExpenseDTO expenseDTO) {
-        // Set current user info if not already set
-        if (expenseDTO.getUserId() == null) {
-            UserDTO currentUser = getCurrentUser();
-            expenseDTO.setUserId(currentUser.getUserId());
-            expenseDTO.setUsername(currentUser.getUsername());
-        }
+        // Force-set current user info
+        UserDTO currentUser = getCurrentUser();
+        expenseDTO.setUserId(currentUser.getUserId());
+        expenseDTO.setUsername(currentUser.getUsername());
 
+        return saveExpense(expenseDTO);
+    }
+
+    // Private helper to save expense
+    private ExpenseDTO saveExpense(ExpenseDTO expenseDTO) {
         ExpenseEntity expenseEntity = new ExpenseEntity();
         expenseEntity.setTitle(expenseDTO.getTitle());
         expenseEntity.setAmount(expenseDTO.getAmount());
         expenseEntity.setDate(expenseDTO.getDate());
         expenseEntity.setNote(expenseDTO.getNote());
-
         expenseEntity.setBudgetId(expenseDTO.getBudgetId());
-        expenseEntity.setBudgetTitle(expenseDTO.getBudgetTitle());
-
         expenseEntity.setCategoryId(expenseDTO.getCategoryId());
-        expenseEntity.setName(expenseDTO.getName());
-
         expenseEntity.setUserId(expenseDTO.getUserId());
         expenseEntity.setUsername(expenseDTO.getUsername());
 
+        BudgetDTO budgetDTO = budgetClient.searchBudget(expenseDTO.getBudgetId());
+        if (budgetDTO != null) {
+            expenseDTO.setBudgetTitle(budgetDTO.getBudgetTitle());
+        }
+
+        CategoryDTO categoryDTO = categoryClient.searchCategory(expenseDTO.getCategoryId());
+        if (categoryDTO != null) {
+            expenseDTO.setName(categoryDTO.getName());
+        }
+
         expenseRepository.save(expenseEntity);
 
-        // Set the generated ID back to the DTO
+        // Update DTO with generated ID
         expenseDTO.setExpenseId(expenseEntity.getExpenseId());
         return expenseDTO;
     }
-
     @Override
     public void updateExpense(ExpenseDTO expenseDTO) {
         Long userId = getCurrentUserId();

@@ -17,18 +17,13 @@ public class ExpenseDTO {
     private String note;
 
     private Long budgetId;
-//    private Integer month;
-//    private Integer year;
     private String budgetTitle;
 
     private Long categoryId;
     private String name;
-//    private String description;
 
     private Long userId;
     private String username;
-//    private String email;
-//    private String password;
 
     @Override
     public String toString() {
