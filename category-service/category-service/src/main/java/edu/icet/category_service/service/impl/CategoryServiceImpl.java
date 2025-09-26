@@ -4,7 +4,9 @@ import edu.icet.category_service.model.dto.CategoryDTO;
 import edu.icet.category_service.model.entity.CategoryEntity;
 import edu.icet.category_service.repository.CategoryRepository;
 import edu.icet.category_service.service.CategoryService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -90,6 +92,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public boolean deleteCategory(Long id) {
         Long userId = getCurrentUserId();
         if (categoryRepository.existsByCategoryIdAndUserId(id, userId)) {

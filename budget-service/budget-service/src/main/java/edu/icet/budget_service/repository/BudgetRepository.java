@@ -1,7 +1,9 @@
 package edu.icet.budget_service.repository;
 
 import edu.icet.budget_service.model.entity.BudgetEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,5 +22,7 @@ public interface BudgetRepository extends JpaRepository<BudgetEntity, Long> {
     boolean existsByBudgetIdAndUserId(Long budgetId, Long userId);
 
     // Delete a budget only if it belongs to the user
+    @Modifying
+    @Transactional
     void deleteByBudgetIdAndUserId(Long budgetId, Long userId);
 }

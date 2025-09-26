@@ -4,6 +4,7 @@ import edu.icet.budget_service.model.dto.BudgetDTO;
 import edu.icet.budget_service.model.entity.BudgetEntity;
 import edu.icet.budget_service.repository.BudgetRepository;
 import edu.icet.budget_service.service.BudgetService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -115,6 +116,7 @@ public class BudgetServiceImpl implements BudgetService {
     }
 
     @Override
+    @Transactional
     public boolean deleteBudget(Long id) {
         Long userId = getCurrentUserId();
         if (budgetRepository.existsByBudgetIdAndUserId(id, userId)) {

@@ -1,7 +1,9 @@
 package edu.icet.category_service.repository;
 
 import edu.icet.category_service.model.entity.CategoryEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,6 +22,8 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
     boolean existsByCategoryIdAndUserId(Long categoryId, Long userId);
 
     // Delete category only if it belongs to user
+    @Modifying
+    @Transactional
     void deleteByCategoryIdAndUserId(Long categoryId, Long userId);
 
     // Find categories by name for a specific user (for search functionality)
