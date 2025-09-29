@@ -22,9 +22,13 @@
 
 ## 🎯 Overview
 
-The Expense Management System is a comprehensive backend solution built with Spring Boot, designed to streamline financial tracking and budgeting. It provides a solid foundation for developing scalable, maintainable expense and budget management applications.
 
-This system offers a modern approach to personal finance management, combining robust backend architecture with intuitive data handling capabilities.
+The Expense Management System is a microservices-based application built with Spring Boot and React, designed to streamline financial tracking and budgeting.
+
+Each service is modular and independently deployable, connected through Eureka Server (service discovery) for seamless communication.
+
+This project provides a scalable, maintainable solution for personal finance management, combining a strong backend with intuitive data handling.
+
 
 ## 🚀 Why Expense Management System?
 
@@ -32,15 +36,21 @@ This project simplifies backend development for financial applications by offeri
 
 ### 🔧 Core Features
 
-- **🌟 REST API Endpoints**: Facilitates CRUD operations for expenses, budgets, users, and categories, enabling quick and efficient client-server interactions.
-
-- **🗄️ MySQL Data Persistence**: Ensures reliable storage and retrieval of financial data with well-structured repositories and entities.
-
 - **🏗️ Layered Architecture**: Promotes clean separation of concerns with service interfaces, implementations, and controllers for scalable development.
 
-- **🌐 CORS Configuration**: Supports secure cross-origin communication, ideal for frontend-backend integration during development.
+- 🌟 Microservices Architecture – User Service, Expense Service, Budget Service, and Category Service, all connected via Eureka Server.
 
-- **📊 Entity & DTO Models**: Provides clear data models for seamless data exchange and persistence, enhancing maintainability.
+- 🌐 Service Discovery – Automatic detection and registration of services for easy scaling.
+
+- 🗄️ MySQL Data Persistence – Reliable storage with Spring Data JPA.
+
+- 📊 Entity & DTO Models – Clean separation of persistence and data exchange.
+
+- 🔒 Validation & Error Handling – Ensures robust and secure data flow.
+
+- ⚡ RESTful Endpoints – CRUD operations for users, expenses, budgets, and categories.
+
+- 🔑 CORS Configuration – Smooth frontend–backend integration.
 
 ## 🛠️ Getting Started
 
@@ -99,14 +109,14 @@ Or alternatively:
 mvn spring-boot:run
 ```
 
-The application will start on `http://localhost:8080` by default.
 
 ### Testing
 
 Test the API endpoints using Postman to ensure everything is working correctly:
 
-1. Start the application (make sure it's running on http://localhost:8080)
-2. Import or create a Postman collection with the following endpoints:
+1. Start the Eureka server
+2. Each service (user, expense, budget, category) registers with Eureka Server on http://localhost:8761. Run each service.
+3. Import or create a Postman collection with the following endpoints:
 
 **<h4>User Management:</h4>**
 
@@ -158,16 +168,19 @@ GET    /category/{id}               - Get category by ID
 - **Category System**: Organize expenses with customizable categories
 - **RESTful APIs**: Complete API endpoints for all operations
 - **Data Validation**: Robust input validation and error handling
+- **Microservices Communication** – Services interact via Eureka
 
 ## 🏛️ Architecture
 
-The system follows a layered architecture pattern:
+The system follows layered + microservice architecture patterns:
 
 ```
-├── Controller Layer    (REST endpoints)
-├── Service Layer      (Business logic)
-├── Repository Layer   (Data access)
-└── Entity Layer       (Data models)
+├── User Service        (User management APIs)  
+├── Expense Service     (Expense APIs)  
+├── Budget Service      (Budget APIs)  
+├── Category Service    (Category APIs)  
+├── Eureka Server       (Service Discovery)  
+└── Gateway             (Central entry point)  
 ```
 
 **Technology Stack:**
@@ -176,6 +189,8 @@ The system follows a layered architecture pattern:
 - **Build Tool**: Maven
 - **Configuration**: XML-based configuration
 - **API Documentation**: RESTful endpoints
+- **Service Discovery**: Eureka Server
+- **Frontend**: React + TypeScript (Axios for API calls)
 
 If you encounter any issues or have questions, please:
 - Check the [Issues](https://github.com/Niveka1998/expense-management-system/issues) page
@@ -185,3 +200,14 @@ If you encounter any issues or have questions, please:
 ---
 
 **Made with ❤️ for better financial management**
+
+
+
+
+
+
+
+
+
+
+
